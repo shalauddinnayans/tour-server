@@ -20,7 +20,20 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
-    console.log("db conectet");
+    const database = client.db("tourism");
+    const hotelCollection = database.collection("hotels");
+    const tourCollection = database.collection("tours");
+
+    app.get("/hotels", async (req, res) => {
+      const cursor = hotelCollection.find({});
+      const hotels = await cursor.toArray();
+      res.send(hotels);
+    });
+    app.get("/tours", async (req, res) => {
+      const cursor = tourCollection.find({});
+      const tours = await cursor.toArray();
+      res.send(tours);
+    });
   } finally {
   }
 }
